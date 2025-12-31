@@ -1,0 +1,180 @@
+1.Write a shell script to display your LOGIN NAME and HOME directory.
+#!/bin/bash
+echo "Login Name: $LOGNAME"
+echo "Home Directory: $HOME"
+2.Write a shell script to display menu like “1. Date, 2. Cal, 3. Ls, 4. Pwd, 5. Exit” and
+execute the commands depending on user choice.
+#!/bin/bash
+while true; do
+ echo "1. Date 2. Cal 3. Ls 4. Pwd 5. Exit"
+ read -p "Enter Choice: " ch
+ case $ch in
+ 1) date ;;
+ 2) cal ;;
+ 3) ls ;;
+ 4) pwd ;;
+ 5) exit ;;
+ *) echo "Invalid choice" ;;
+ esac
+done
+3. Write a shell script to accept the name from the user and check whether user entered
+name is file or directory. If name is file display its size and if it is directory display its
+contents.
+#!/bin/bash
+read -p "Enter name: " name
+if [ -f "$name" ]; then
+ echo "It is a file."
+ du -h "$name" # Display size
+elif [ -d "$name" ]; then
+ echo "It is a directory. Contents:"
+ ls "$name"
+else
+ echo "Not a valid file or directory."
+fi
+4. Write a shell script to determine whether a given number is prime or not
+#!/bin/bash
+read -p "Enter number: " n
+flag=0
+if [ $n -lt 2 ]; then
+ echo "Not Prime"
+else
+ for (( i=2; i*i<=n; i++ )); do
+ if (( n % i == 0 )); then
+ flag=1
+ break
+ fi
+ done
+ if [ $flag -eq 0 ]; then
+ echo "Prime"
+ else
+ echo "Not Prime"
+ fi
+fi
+5. Write a Program to find the greatest of three numbers
+#!/bin/bash
+read -p "Enter three numbers: " a b c
+if [ $a -gt $b ] && [ $a -gt $c ]; then
+ echo "$a is greatest"
+elif [ $b -gt $a ] && [ $b -gt $c ]; then
+ echo "$b is greatest"
+else
+ echo "$c is greatest"
+fi
+6. Write a Program to find whether a given year is a leap year or not
+#!/bin/bash
+read -p "Enter year: " y
+# Logic: Divisible by 4 AND (NOT divisible by 100 OR divisible by 400)
+if (( (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0) )); then
+ echo "Leap Year"
+else
+ echo "Not a Leap Year"
+fi
+7. Write a Program to find whether a given number is positive or negative
+#!/bin/bash
+read -p "Enter number: " n
+if [ $n -gt 0 ]; then
+ echo "Positive"
+elif [ $n -lt 0 ]; then
+ echo "Negative"
+else
+ echo "Zero"
+fi
+8. Write a program to print the table of a given number.
+#!/bin/bash
+read -p "Enter number: " n
+for (( i=1; i<=10; i++ )); do
+ echo "$n * $i = $((n*i))"
+done
+9. Write a program to find the factorial of given number.
+#!/bin/bash
+read -p "Enter number: " n
+fact=1
+for (( i=1; i<=n; i++ )); do
+ fact=$((fact * i))
+done
+echo "Factorial: $fact"
+10. Write a program to find given number of terms in the Fibonacci series.
+#!/bin/bash
+read -p "Enter number of terms: " N
+a=0
+b=1
+echo "Fibonacci Series:"
+for (( i=0; i<N; i++ )); do
+ echo -n "$a "
+ fn=$((a + b))
+ a=$b
+ b=$fn
+done
+echo ""
+11. Write a program to calculate gross salary if the DA is 40%, HRA is 20% of basic
+salary.
+Accept basic salary form user and display gross salary (Result can be floating point
+value)
+.#!/bin/bash
+read -p "Enter Basic Salary: " basic
+# DA = 40%, HRA = 20% -> Total = Basic + 0.4*Basic + 0.2*Basic
+gross=$(echo "scale=2; $basic + ($basic * 0.40) + ($basic * 0.20)" | bc)
+echo "Gross Salary: $gross"
+12. Write a shell script to accept a filename as argument and displays the last
+modification
+time if the file exists and a suitable message if it doesn’t exist.
+#!/bin/bash
+filename=$1 # Accept filename as argument
+if [ -e "$filename" ]; then
+ echo "File exists."
+ # 'stat' command gives detailed info. %y gives modification time.
+ stat -c "Last modified: %y" "$filename"
+else
+ echo "File does not exist."
+fi
+13. Write a shell script to display only hidden file of current directory.
+#!/bin/bash
+echo "Hidden files in current directory:"
+# 'ls -d .*' lists files starting with dot.
+ls -d .*
+14. Write a shell script to display only executable files of current directory.
+#!/bin/bash
+echo "Executable files:"
+for file in *; do
+ if [ -x "$file" ] && [ ! -d "$file" ]; then
+ echo "$file"
+ fi
+done
+15. Accept the two file names from user and append the contents in reverse case of first
+file
+into second file.
+#!/bin/bash
+read -p "Enter source file: " f1
+read -p "Enter destination file: " f2
+if [ -f "$f1" ]; then
+ # 'tr' translates characters. a-z to A-Z and A-Z to a-z swaps case.
+ cat "$f1" | tr 'a-zA-Z' 'A-Za-z' >> "$f2"
+ echo "Appended reversed case content to $f2"
+else
+ echo "Source file not found."
+fi
+16. Write a shell script to display welcome message to the user along with contents of
+his
+home directory. Ensure that shell script will execute automatically when user login to the
+shell. (Make entry of your shell script into .bashrc file into your home directory).
+Step 1:
+#!/bin/bash
+echo "Welcome, $LOGNAME!"
+echo "Contents of your home directory:"
+ls ~
+Step 2:
+echo "~/welcome.sh" >> ~/.bashrc
+17. Print the following pattern.
+*
+* *
+* * *
+* * * *
+* * * * *
+#!/bin/bash
+rows=5
+for (( i=1; i<=rows; i++ )); do
+ for (( j=1; j<=i; j++ )); do
+ echo -n "* "
+ done
+ echo ""
+done

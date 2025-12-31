@@ -1,0 +1,61 @@
+============================================================
+DOCKER EXAM CHEAT SHEET - CUSTOM HTTPD
+============================================================
+OBJECTIVE:
+Create a custom Apache (httpd) image that serves a specific
+index.html file, then run and test it.
+------------------------------------------------------------
+STEP 1: SETUP WORKSPACE
+------------------------------------------------------------
+# Create a folder to keep files organized
+mkdir exam_docker
+# Go into the folder
+cd exam_docker
+------------------------------------------------------------
+STEP 2: CREATE THE HTML FILE
+------------------------------------------------------------
+# Create index.html with your custom message
+<html>
+<body>
+<h1>Hello, this is Satyam's Exam Server!</h1>
+</body>
+</html>
+------------------------------------------------------------
+STEP 3: CREATE THE DOCKERFILE
+------------------------------------------------------------
+# Create a new file named 'Dockerfile' (Case sensitive!)
+# You can use 'nano Dockerfile' or 'vim Dockerfile'
+# Paste the following two lines inside:
+FROM httpd:latest
+COPY index.html /usr/local/apache2/htdocs/
+------------------------------------------------------------
+STEP 4: BUILD THE IMAGE
+------------------------------------------------------------
+# Build the image from the current directory (.)
+# -t names the image "my-web"
+docker build -t my-web .
+------------------------------------------------------------
+STEP 5: RUN THE CONTAINER
+------------------------------------------------------------
+# Run the container in detached mode (-d)
+# Map Host Port 8080 to Container Port 80 (-p)
+docker run -d -p 8080:80 --name exam-container my-web
+------------------------------------------------------------
+STEP 6: VERIFY OUTPUT
+------------------------------------------------------------
+# Test connectivity from your terminal
+curl http://localhost:8080
+# Expected Output:
+# <h1>Success! This is Satyam's Exam Server.</h1>
+------------------------------------------------------------
+STEP 7: CLEANUP (Post-Exam)
+------------------------------------------------------------
+# Stop the running container
+docker stop exam-container
+# Remove the container
+docker rm exam-container
+============================================================
+KEY PATHS TO REMEMBER
+============================================================
+Apache (httpd) Path:  /usr/local/apache2/htdocs/
+Nginx Path:  /usr/share/nginx/html/
